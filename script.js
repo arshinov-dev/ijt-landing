@@ -1456,9 +1456,11 @@
         let currentLevelFilter = 'all';
         let currentFormFilter = 'all';
         const mobileProgramsQuery = window.matchMedia('(max-width: 768px)');
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         const mobileProgramBatchSize = 3;
         let mobileProgramsLimit = mobileProgramBatchSize;
         let lastFilteredPrograms = programs;
+        let revealObserver;
 
         function escapeHtml(value) {
             return String(value)
@@ -1532,6 +1534,63 @@
             return `places-count-${getPlacesBreakdown(program).length}`;
         }
 
+        function observeReveal(element, delay = 0) {
+            if (!element) return;
+
+            element.classList.add('reveal-on-scroll');
+            element.style.setProperty('--reveal-delay', `${delay}ms`);
+
+            if (reducedMotionQuery.matches) {
+                element.classList.add('is-visible');
+                return;
+            }
+
+            if (revealObserver) {
+                requestAnimationFrame(() => {
+                    revealObserver.observe(element);
+                });
+            }
+        }
+
+        function setupScrollReveal() {
+            const revealElements = document.querySelectorAll([
+                '.programs-header',
+                '.program-card',
+                '.apply-heading',
+                '.apply-route',
+                '.apply-note',
+                '.contacts-heading',
+                '.contacts-info',
+                '.map-container'
+            ].join(','));
+
+            if (reducedMotionQuery.matches) {
+                revealElements.forEach(element => {
+                    element.classList.add('reveal-on-scroll', 'is-visible');
+                });
+                return;
+            }
+
+            revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.14,
+                rootMargin: '0px 0px -56px 0px'
+            });
+
+            revealElements.forEach((element, index) => {
+                const delay = element.classList.contains('program-card')
+                    ? Number.parseFloat(element.style.getPropertyValue('--reveal-delay')) || 0
+                    : (index % 4) * 70;
+                observeReveal(element, delay);
+            });
+        }
+
         function formatPlacesSummary(program) {
             const places = getPlacesBreakdown(program);
             const importantPlaces = places.filter(place => (
@@ -1559,7 +1618,7 @@
             visiblePrograms.forEach((program, index) => {
                 const card = document.createElement('div');
                 card.className = 'program-card';
-                card.style.animationDelay = `${index * 0.04}s`;
+                card.style.setProperty('--reveal-delay', `${Math.min(index, 6) * 35}ms`);
                 card.onclick = () => openModal(program);
 
                 const badgeClass = program.level === 'basic' ? 'badge-basic' : 'badge-specialized';
@@ -1588,6 +1647,7 @@
                 `;
 
                 grid.appendChild(card);
+                observeReveal(card, Math.min(index, 6) * 35);
             });
 
             updateProgramsActions(programsToRender.length, visiblePrograms.length, shouldLimitPrograms);
@@ -1771,6 +1831,7 @@
 
         // Initialize
         renderPrograms(programs);
+        setupScrollReveal();
 
         if (mobileProgramsQuery.addEventListener) {
             mobileProgramsQuery.addEventListener('change', handleProgramsViewportChange);
