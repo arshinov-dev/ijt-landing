@@ -1479,6 +1479,12 @@
             return escapeHtml(value).replace(/-/g, '&#8209;');
         }
 
+        function formatSpecialtyTitle(value) {
+            return String(value)
+                .replace(/\s*\[ТОЛЬКО ДЛЯ ИНОСТРАНЦЕВ\]\s*/gi, '')
+                .trim();
+        }
+
         function getPlacesBreakdown(program) {
             const categories = (String(program.placesLabel || '').match(/\(([^)]+)\)/)?.[1] || 'места')
                 .split('/')
@@ -1629,19 +1635,11 @@
                         <span class="program-level-badge ${badgeClass}">${escapeHtml(program.levelShortName)}</span>
                     </div>
                     <div class="program-content">
-                        <div class="program-code">${escapeHtml(program.number)} · ${escapeHtml(program.code)}</div>
-                        <h3 class="program-title">${escapeHtml(program.title)}</h3>
-                        <div class="program-meta">
-                            <div class="program-meta-item">
-                                <span>Срок</span> ${escapeHtml(program.duration)}
-                            </div>
-                            <div class="program-meta-item">
-                                <span>Форма</span> ${escapeHtml(program.formDisplayName)}
-                            </div>
-                            <div class="program-meta-item">
-                                <span>Места</span> ${formatPlacesSummary(program)}
-                            </div>
+                        <div class="program-code">
+                            <span class="program-code-value">${escapeHtml(program.code)}</span>
+                            <span class="program-direction">${escapeHtml(formatSpecialtyTitle(program.specialtyTitle))}</span>
                         </div>
+                        <h3 class="program-title">${escapeHtml(program.title)}</h3>
                         <button class="program-btn" type="button">Подробнее</button>
                     </div>
                 `;

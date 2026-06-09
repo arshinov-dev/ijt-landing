@@ -62,24 +62,24 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             text-decoration: none;
             color: var(--primary-blue);
+            min-width: 0;
         }
 
         .logo-mark {
-            width: 56px;
-            height: 56px;
+            width: 46px;
+            height: 46px;
             object-fit: contain;
-            background: var(--white);
-            border-radius: 16px;
-            padding: 6px;
             flex-shrink: 0;
         }
 
         .logo-texts {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
         }
 
         .logo-university {
@@ -88,20 +88,17 @@
             letter-spacing: 0;
             text-transform: uppercase;
             line-height: 1.2;
-            max-width: 260px;
+            max-width: 320px;
         }
 
-        .logo-divider {
-            width: 1px;
-            height: 34px;
-            background: rgba(2, 68, 146, 0.22);
-        }
-
-        .logo-unit {
+        .logo-institute {
+            margin-top: 2px;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 13px;
             letter-spacing: 0;
-            text-transform: uppercase;
+            line-height: 1.18;
+            color: var(--text-dark);
+            max-width: 360px;
         }
 
         nav ul {
@@ -637,37 +634,33 @@
         }
 
         .program-code {
-            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .program-code-value {
             color: var(--primary-blue);
+            font-size: 14px;
             font-weight: 500;
-            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .program-direction {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.18;
         }
 
         .program-title {
             font-size: 20px;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-bottom: 22px;
             line-height: 1.4;
             color: var(--text-dark);
-        }
-
-        .program-meta {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .program-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        .program-meta-item span {
-            font-weight: 500;
         }
 
         .program-btn {
@@ -1674,7 +1667,12 @@
 
             .logo-university {
                 font-size: 13px;
-                max-width: 220px;
+                max-width: 270px;
+            }
+
+            .logo-institute {
+                font-size: 12px;
+                max-width: 300px;
             }
 
             .contacts-container {
@@ -1758,23 +1756,19 @@
             }
 
             .logo-mark {
-                width: 46px;
-                height: 46px;
-                border-radius: 12px;
+                width: 38px;
+                height: 38px;
             }
 
             .logo-university {
-                font-size: 11px;
-                max-width: 180px;
+                font-size: 10px;
+                max-width: 210px;
             }
 
-            .logo-divider {
-                height: 32px;
-            }
-
-            .logo-unit {
-                font-size: 14px;
-                letter-spacing: 0;
+            .logo-institute {
+                font-size: 10px;
+                max-width: 220px;
+                line-height: 1.12;
             }
 
             .hero {
@@ -1854,6 +1848,26 @@
 
             .programs-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .program-content {
+                padding: 20px;
+            }
+
+            .program-code {
+                align-items: flex-start;
+                gap: 5px 8px;
+            }
+
+            .program-direction {
+                flex-basis: 100%;
+                font-size: 12px;
+            }
+
+            .program-title {
+                font-size: 19px;
+                line-height: 1.28;
+                margin-bottom: 18px;
             }
 
             .programs-actions:not([hidden]) {
